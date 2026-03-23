@@ -38,8 +38,3 @@ Go言語の基本サーバー構成
 - Application: アプリケーション層 (ユースケース)
 - Infrastructure: インフラ層
 - Presentation: プレゼンテーション層 (ハンドラー)
-
-- Domain: ドメイン層
-- Application: アプリケーション層 (ユースケース)
-- Infrastructure: インフラ層
-- Presentation: プレゼンテーション層 (ハンドラー)
