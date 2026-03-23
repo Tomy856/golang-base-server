@@ -1,3 +1,4 @@
+// Package infrastructure はロギングなどのインフラストラクチャレベルのユーティリティを提供します。
 package infrastructure
 
 import (
