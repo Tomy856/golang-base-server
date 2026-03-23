@@ -1,5 +1,5 @@
 package application
 
 type HelloUsecase interface {
-	GetHello() string
+	GetHello() (string, error)
 }
