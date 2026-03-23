@@ -1,0 +1,11 @@
+{
+  "name": "Go Dev Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/server",
+  "shutdownAction": "stopCompose",
+  "extensions": [
+    "golang.Go"
+  ],
+  "postCreateCommand": "apk add --no-cache docker-compose"
+}

@@ -7,6 +7,7 @@
 
 ## 技術スタック・実装ルール
 - **言語**: Go (Gin framework)
+- **アーキテクチャ**: DDD駆動とクリーンアーキテクチャを採用すること。
 - **Error Handling**: `if err != nil` を省略せず、`fmt.Errorf` で文脈を含めたラッピングを行うこと。
 - **Context**: DB操作や外部通信を伴う関数には必ず `context.Context` を第一引数に含めること。
 - 非同期処理は必ず async/await を使用し、エラーハンドリングを含めること
