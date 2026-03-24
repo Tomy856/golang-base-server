@@ -1,0 +1,8 @@
+# 環境変数（UID/GIDはマシンごとに異なるため除外）
+.env
+
+# Air ビルド成果物
+tmp/
+
+# ログ
+logs/error/*.log

@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    user: "${DOCKER_UID}:${DOCKER_GID}"
     ports:
       - "8080:8080"
       - "6060:6060"
