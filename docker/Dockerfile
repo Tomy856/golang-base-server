@@ -14,4 +14,5 @@ RUN go install github.com/air-verse/air@v1.61.7 \
 
 COPY . .
 
-CMD ["air"]
+# godoc をバックグラウンドで起動してから air を前景プロセスにする
+CMD ["sh", "-c", "godoc -http=0.0.0.0:6060 -index -index_interval=0 & exec air"]
