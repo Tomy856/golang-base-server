@@ -1,4 +1,3 @@
-// Package application はサービスのアプリケーション層のユースケースを実装します。
 package application
 
 type helloUsecase struct{}
@@ -10,5 +9,5 @@ func NewHelloUsecase() HelloUsecase {
 
 // GetHello はあいさつメッセージを返します。
 func (u *helloUsecase) GetHello() (string, error) {
-	return "Hello, world!", nil
+	return "Hello, world!!", nil
 }

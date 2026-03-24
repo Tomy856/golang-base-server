@@ -1,3 +1,4 @@
+// Package main は golang-base-server のエントリーポイントを提供します。
 package main
 
 import (
@@ -11,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// main はサーバーを起動します。
 func main() {
 	usecase := application.NewHelloUsecase()
 	handler := presentation.NewHelloHandler(usecase)
