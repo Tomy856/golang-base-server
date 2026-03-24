@@ -8,5 +8,6 @@
       "extensions": ["golang.Go"]
     }
   },
+  "remoteUser": "root",
   "forwardPorts": [8080, 6060]
 }

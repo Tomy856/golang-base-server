@@ -1,3 +1,4 @@
+# golang:1.24-bookworm をベースにする
 FROM golang:1.24-bookworm
 
 RUN apt-get update && apt-get install -y procps git && rm -rf /var/lib/apt/lists/*
