@@ -24,6 +24,9 @@ Go言語の基本サーバー構成
 2. ブラウザで http://localhost:8080 にアクセスすると "Hello World!!" が表示されます。
    - ソースコードの変更が自動で反映されます（ホットリロード）。
 
+3. GoDoc を確認
+   - ブラウザで http://localhost:6060 にアクセスすると `godoc` が起動中で API ドキュメントが参照できます。
+
 ### Dev Containerでの開発実行（推奨）
 1. VS Codeでこのフォルダを開く。
 2. 通知が表示されたら "Reopen in Container" をクリック。
