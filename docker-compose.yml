@@ -5,8 +5,18 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "8080:8080"
-      - "6060:6060"
     volumes:
       - .:/server
     environment:
       - GO111MODULE=on
+
+  godoc:
+    image: golang:1.25-bookworm
+    volumes:
+      - .:/server
+    working_dir: /server
+    command: sh -c "go install golang.org/x/tools/cmd/godoc@latest && godoc -http=0.0.0.0:6060 -index -index_interval=0"
+    ports:
+      - "6060:6060"
+    depends_on:
+      - app
