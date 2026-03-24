@@ -6,7 +6,8 @@ tmp_dir = "tmp"
   args_bin = []
   bin = "./tmp/main"
   cmd = "go build -o ./tmp/main cmd/main.go"
-  post_cmd = ["sh -c 'pkill godoc 2>/dev/null; godoc -http=0.0.0.0:6060 &'"]
+  pre_cmd = ["bash scripts/reload-godoc.sh"]
+  post_cmd = ["bash scripts/reload-godoc.sh"]
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []

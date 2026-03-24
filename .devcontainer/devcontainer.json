@@ -9,6 +9,5 @@
     }
   },
   "remoteUser": "root",
-  "forwardPorts": [8080, 6060],
-  "postStartCommand": "bash scripts/reload-godoc.sh"
+  "forwardPorts": [8080, 6060]
 }
