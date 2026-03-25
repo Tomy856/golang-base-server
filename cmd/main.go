@@ -14,8 +14,10 @@ import (
 
 // main はサーバーを起動します。
 func main() {
-	usecase := application.NewHelloUsecase()
-	handler := presentation.NewHelloHandler(usecase)
+	helloUsecase := application.NewHelloUsecase()
+	helloHandler := presentation.NewHelloHandler(helloUsecase)
+	chatUsecase := application.NewChatUsecase()
+	chatHandler := presentation.NewChatHandler(chatUsecase)
 
 	r := gin.New()
 
@@ -28,6 +30,7 @@ func main() {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 	}))
 
-	r.GET("/", handler.GetHello)
+	r.GET("/", helloHandler.GetHello)
+	r.POST("/api/chat", chatHandler.PostChat)
 	r.Run()
 }
