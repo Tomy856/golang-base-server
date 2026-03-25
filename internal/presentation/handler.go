@@ -28,7 +28,7 @@ func (h *HelloHandler) GetHello(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
 	}
-	c.String(http.StatusOK, message)
+	c.HTML(http.StatusOK, "index.html", gin.H{"message": message})
 }
 
 // ChatRequest は POST /api/chat のリクエストボディ構造です。

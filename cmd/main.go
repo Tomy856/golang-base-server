@@ -30,7 +30,10 @@ func main() {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 	}))
 
+	r.LoadHTMLGlob("templates/*")
+
 	r.GET("/", helloHandler.GetHello)
 	r.POST("/api/chat", chatHandler.PostChat)
+	r.Static("/static", "./static")
 	r.Run()
 }

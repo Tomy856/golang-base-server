@@ -99,6 +99,14 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
     - `/server/features/0003-ai-interface-abstraction/04-client-validation.feature`
     - `/server/features/0003-ai-interface-abstraction/06-frontend-timeout.feature`
 
+## Definition of Done
+- [x] 01-api-foundation.feature: API エンドポイント・データ構造の確立
+- [x] 02-ui-foundation.feature: HTML/CSS/Vanilla JS フレームワーク
+- [ ] 03-happy-path.feature: 正常系フロー - ユーザー入力 → サーバー処理 → UI 表示
+- [ ] 04-client-validation.feature: フロントエンドバリデーション
+- [ ] 05-server-error-handling.feature: サーバー側エラー処理
+- [ ] 06-frontend-timeout.feature: フロントエンドタイムアウト処理
+
 ### UI フロー
 1. ユーザーが入力フィールドにメッセージを入力
 2. 送信ボタン押下時に Vanilla JS でバリデーション実行
