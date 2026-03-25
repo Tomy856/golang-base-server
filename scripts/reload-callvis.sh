@@ -1,3 +1,34 @@
+#!/bin/bash
+# 1. 既存の symbols フォルダをリセット
+mkdir -p docs/symbols
+rm -f docs/symbols/*.md
+
+# 2. 全体のインデックス (symbols_map.md) を作成
+echo "# Project Symbols Map" > docs/symbols_map.md
+echo "生成日: $(date)" >> docs/symbols_map.md
+echo "" >> docs/symbols_map.md
+
+# 3. パッケージごとにシンボルを抽出
+# internal 配下の各ディレクトリをループ
+for dir in $(find internal -type d); do
+    pkg_name=$(basename "$dir")
+    # 中身が空でないか確認
+    if ls "$dir"/*.go >/dev/null 2>&1; then
+        target_file="docs/symbols/${pkg_name}.md"
+        echo "## Package: $pkg_name" > "$target_file"
+        
+        # 構造体とインターフェース、主要な関数を抽出して各ファイルへ
+        grep -E "type [A-Z].* (struct|interface)" "$dir"/*.go >> "$target_file" 2>/dev/null
+        grep -E "func [A-Z].*" "$dir"/*.go >> "$target_file" 2>/dev/null
+        
+        # インデックスファイルにリンクを追記
+        echo "- [[$pkg_name]]: $dir" >> docs/symbols_map.md
+    fi
+done
+
+# 4. 既存の go-callvis (SVG生成) も実行
+# (ここに既存の callvis コマンドを記述)
+
 #!/usr/bin/env bash
 set -euo pipefail
 
