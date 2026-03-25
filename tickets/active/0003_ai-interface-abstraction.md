@@ -10,6 +10,18 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 「生きたモック」の刷新: 現在の Hello World 状態を脱し、実際にAPI経由でデータが流れる最小限の「垂直スライス」を完成させるため。
 
 ## 2. BDD Scenarios
+
+**詳細な BDD scenarios は以下の `.feature` ファイルに分割・実装可能な単位で定義されています：**
+
+| ファイル | 説明 |
+|---------|------|
+| `/server/features/0003-ai-interface-abstraction/01-api-foundation.feature` | Step 1: バックエンド基盤 - API エンドポイント・データ構造の確立 |
+| `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature` | Step 2: フロントエンド基盤 - HTML/CSS/Vanilla JS フレームワーク |
+| `/server/features/0003-ai-interface-abstraction/03-happy-path.feature` | Step 3: 正常系フロー - ユーザー入力 → サーバー処理 → UI 表示 |
+| `/server/features/0003-ai-interface-abstraction/04-client-validation.feature` | Step 4: フロントエンドバリデーション - Scenario 1 |
+| `/server/features/0003-ai-interface-abstraction/05-server-error-handling.feature` | Step 5: サーバー側エラー処理 - Scenario 2 |
+| `/server/features/0003-ai-interface-abstraction/06-frontend-timeout.feature` | Step 6: フロントエンドタイムアウト処理 - Scenario 3 |
+
 ### Scenario 0: 正常系 - AI への質問と応答 (200)
 - **Given**: ユーザーが有効なメッセージを入力し、送信ボタンを押下した
 - **When**: サーバーが Gemini API 経由で正常なレスポンス `{ "reply": "...", "status": "success" }` を返却した
@@ -17,21 +29,25 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
   - チャットエリアにユーザーの入力とAIの回答が対になって追加される
   - 入力フィールドがクリアされ、フォーカスが戻る
   - 送信ボタンが再度有効化される
+- **参照**: `/server/features/0003-ai-interface-abstraction/03-happy-path.feature`
 
 ### Scenario 1: クライアント側エラー (4xx)
 - **Given**: ユーザーが空文字、または制限文字数を超える入力を送信した
 - **When**: 送信ボタンが押下される
 - **Then**: APIを叩く前にフロントエンドでバリデーションエラーを表示し、API通信（POST）を発生させないこと。
+- **参照**: `/server/features/0003-ai-interface-abstraction/04-client-validation.feature`
 
 ### Scenario 2: サーバー側・AI APIエラー (5xx)
 - **Given**: Gemini/Bedrockのクォータ制限や一時的なダウンが発生した
 - **When**: サーバーが 500 または 503 エラーを返却する
 - **Then**: チャットエリアに「一時的にAIが応答できません。時間を置いて再度お試しください」とエラーメッセージを表示する。入力フィールドの内容を保持したまま、送信ボタンを再度有効化（リトライ可能状態）にする。
+- **参照**: `/server/features/0003-ai-interface-abstraction/05-server-error-handling.feature`
 
 ### Scenario 3: タイムアウト挙動
 - **Given**: AIからの応答が30秒以上経過しても返ってこない
 - **When**: フロントエンドのタイムアウトが発生する
 - **Then**: 接続を遮断し、「応答がタイムアウトしました」と表示。ユーザーに再送を促す。
+- **参照**: `/server/features/0003-ai-interface-abstraction/06-frontend-timeout.feature`
 
 ## 2.5 JSON Schema Definition
 
@@ -72,11 +88,16 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 - **テンプレート**: `/server/templates/index.html` （新規作成）
   - Go (Gin) の `c.HTML()` でレンダリング
   - チャットエリア、入力フィールド、送信ボタンの基本構造
+  - **参照 BDD**: `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature`
   
 - **JavaScript**: `/server/static/js/chat.js` （新規作成）
   - Vanilla JS のみ使用（外部ライブラリ不使用）
   - メッセージ送信、UI更新、バリデーション、エラーメッセージ表示を実装
   - タイムアウト処理（30秒）を含む
+  - **参照 BDD**: 
+    - `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature`
+    - `/server/features/0003-ai-interface-abstraction/04-client-validation.feature`
+    - `/server/features/0003-ai-interface-abstraction/06-frontend-timeout.feature`
 
 ### UI フロー
 1. ユーザーが入力フィールドにメッセージを入力
@@ -84,6 +105,7 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 3. 有効な場合、POST `/api/chat` へ JSON リクエスト送信
 4. レスポンス受け取り後、チャットエリアに対話を追加
 5. エラー発生時は相応のメッセージを表示
+**参照 BDD**: `/server/features/0003-ai-interface-abstraction/03-happy-path.feature, 05-server-error-handling.feature`
 
 ## 4. Definition of Done
 - [ ] テストカバレッジ 80% 以上
