@@ -10,27 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// HelloHandler はあいさつルートを処理します。
-type HelloHandler struct {
-	usecase application.HelloUsecase
-}
-
-// NewHelloHandler は提供されたユースケースで新しい HelloHandler を生成します。
-func NewHelloHandler(usecase application.HelloUsecase) *HelloHandler {
-	return &HelloHandler{usecase: usecase}
-}
-
-// GetHello は GET / に対する HTTP ハンドラーで、あいさつレスポンスを返します。
-func (h *HelloHandler) GetHello(c *gin.Context) {
-	message, err := h.usecase.GetHello()
-	if err != nil {
-		infrastructure.LogError(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
-		return
-	}
-	c.HTML(http.StatusOK, "index.html", gin.H{"message": message})
-}
-
 // ChatRequest は POST /api/chat のリクエストボディ構造です。
 type ChatRequest struct {
 	Message   string `json:"message" binding:"required,min=1,max=2000"`

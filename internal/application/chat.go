@@ -1,3 +1,4 @@
+// Package application はサービスのアプリケーション層のユースケースを実装します。
 package application
 
 import "context"

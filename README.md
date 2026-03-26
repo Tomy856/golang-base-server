@@ -1,4 +1,8 @@
-Go言語の基本サーバー構成
+Go言語のAIチャットサーバー構成
+
+## 概要
+
+このプロジェクトは、AIインターフェースの抽象化を目指したGo言語ベースのサーバーです。GeminiやBedrockなどのAIサービスと統合し、クライアントが統一されたインターフェースでAIと対話できる基盤を提供します。DDD（Domain-Driven Design）とクリーンアーキテクチャを採用しています。
 
 ## 実行方法
 
@@ -34,6 +38,20 @@ Go言語の基本サーバー構成
 3. 自動的に開発コンテナに入り、Airによるホットリロードが有効になります。
 4. ブラウザで http://localhost:8080 にアクセスすると、AIチャット画面が表示されます。
 
+## テスト実行
+
+プロジェクトのテストを実行するには、以下のスクリプトを使用します：
+
+```bash
+./scripts/run-tests.sh
+```
+
+または、手動で：
+
+```bash
+go test ./...
+```
+
 ## API 仕様
 - GET /
   - HTMLテンプレートを返却します (index.html, `message: Hello, world!!`).
@@ -49,3 +67,17 @@ Go言語の基本サーバー構成
 - Application: アプリケーション層 (ユースケース)
 - Infrastructure: インフラ層
 - Presentation: プレゼンテーション層 (ハンドラー)
+
+## ドキュメント
+
+- [システムアーキテクチャ](docs/System_Architecture.md)
+- [ADR (Architecture Decision Records)](docs/adr/README.md)
+- [ダイアグラム](docs/diagrams/)
+- [BDDシナリオ](server/features/0003-ai-interface-abstraction/)
+
+## 技術スタック
+
+- Go 1.21
+- Gin Web Framework
+- Docker & Docker Compose
+- HTML/CSS/JavaScript (Vanilla JS)

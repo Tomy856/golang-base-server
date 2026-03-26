@@ -14,8 +14,6 @@ import (
 
 // main はサーバーを起動します。
 func main() {
-	helloUsecase := application.NewHelloUsecase()
-	helloHandler := presentation.NewHelloHandler(helloUsecase)
 	chatUsecase := application.NewChatUsecase()
 	chatHandler := presentation.NewChatHandler(chatUsecase)
 
@@ -32,7 +30,11 @@ func main() {
 
 	r.LoadHTMLGlob("templates/*")
 
-	r.GET("/", helloHandler.GetHello)
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "Chat Interface", // 必要に応じてタイトルなどを渡す
+		})
+	})
 	r.POST("/api/chat", chatHandler.PostChat)
 	r.Static("/static", "./static")
 	r.Run()
