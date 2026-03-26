@@ -2,7 +2,11 @@
 
 # scripts/update-adr-index.sh
 
-ADR_DIR="./docs/adr"
+# スクリプトの場所を基準にルートディレクトリを計算（どの cwd から実行しても動作）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+ADR_DIR="$ROOT_DIR/docs/adr"
 INDEX_FILE="$ADR_DIR/README.md"
 
 # 1. 目次のヘッダー作成

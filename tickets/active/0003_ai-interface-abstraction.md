@@ -16,7 +16,7 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 | ファイル | 説明 |
 |---------|------|
 | `/server/features/0003-ai-interface-abstraction/01-api-foundation.feature` | Step 1: バックエンド基盤 - API エンドポイント・データ構造の確立 |
-| `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature` | Step 2: フロントエンド基盤 - HTML/CSS/Vanilla JS フレームワーク |
+| `/server/features/0003-ai-interface-abstraction/02-00-ui-foundation.feature` | Step 2: フロントエンド基盤 - HTML/CSS/Vanilla JS フレームワーク |
 | `/server/features/0003-ai-interface-abstraction/02-01-chat-display-fix.feature` | Step 2-01: チャット表示修正 - 送信時のinitialView切り替えとメッセージ描画（Tailwind非依存） |
 | `/server/features/0003-ai-interface-abstraction/03-happy-path.feature` | Step 3: 正常系フロー - ユーザー入力 → サーバー処理 → UI 表示 |
 | `/server/features/0003-ai-interface-abstraction/04-client-validation.feature` | Step 4: フロントエンドバリデーション - Scenario 1 |
@@ -89,7 +89,7 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 - **テンプレート**: `/templates/index.html`
   - Go (Gin) の `c.HTML()` でレンダリング
   - チャットエリア、入力フィールド、送信ボタンの基本構造
-  - **参照 BDD**: `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature`
+  - **参照 BDD**: `/server/features/0003-ai-interface-abstraction/02-00-ui-foundation.feature`
 
 - **JavaScript**: `/static/js/chat.js`
   - Vanilla JS のみ使用（外部ライブラリ・Tailwind CDN 不使用）
@@ -97,7 +97,7 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
   - メッセージ送信、initialView切り替え、UI更新、バリデーション、エラーメッセージ表示を実装
   - タイムアウト処理（30秒、AbortController使用）を含む
   - **参照 BDD**:
-    - `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature`
+    - `/server/features/0003-ai-interface-abstraction/02-00-ui-foundation.feature`
     - `/server/features/0003-ai-interface-abstraction/02-01-chat-display-fix.feature`
     - `/server/features/0003-ai-interface-abstraction/04-client-validation.feature`
     - `/server/features/0003-ai-interface-abstraction/06-frontend-timeout.feature`
