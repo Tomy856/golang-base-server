@@ -13,7 +13,8 @@ Go言語の基本サーバー構成
    go run cmd/main.go
    ```
 
-3. ブラウザで http://localhost:8080 にアクセスすると "Hello World!!" が表示されます。
+3. ブラウザで http://localhost:8080 にアクセスすると、AIチャットインターフェースが表示されます。
+   - ルートは `GET /` でテンプレート `index.html` を返し、内部で `Hello, world!!` を生成するユースケースを使っています。
 
 ### Docker Composeでの開発実行
 1. Docker Composeで起動:
@@ -21,7 +22,7 @@ Go言語の基本サーバー構成
    docker compose up --build
    ```
 
-2. ブラウザで http://localhost:8080 にアクセスすると "Hello World!!" が表示されます。
+2. ブラウザで http://localhost:8080 にアクセスすると、AIチャット画面が表示されます。
    - ソースコードの変更が自動で反映されます（ホットリロード）。
 
 3. GoDoc を確認
@@ -31,7 +32,14 @@ Go言語の基本サーバー構成
 1. VS Codeでこのフォルダを開く。
 2. 通知が表示されたら "Reopen in Container" をクリック。
 3. 自動的に開発コンテナに入り、Airによるホットリロードが有効になります。
-4. ブラウザで http://localhost:8080 にアクセスすると "Hello World!!" が表示されます。
+4. ブラウザで http://localhost:8080 にアクセスすると、AIチャット画面が表示されます。
+
+## API 仕様
+- GET /
+  - HTMLテンプレートを返却します (index.html, `message: Hello, world!!`).
+- POST /api/chat
+  - JSONリクエスト: `message`, `session_id` (UUID)
+  - JSONレスポンス: `reply`, `status`, `error_message`
 
 ## アーキテクチャ
 
