@@ -21,9 +21,17 @@ mkdir -p logs/error
 # 3. 一時ファイルのクリーンアップ（前回の結果を残さない）
 rm -f coverage.out test_result.log
 
-# 4. テスト実行
+# 4. カバレッジ計測対象パッケージを列挙
+#    tests/ は外部テストパッケージのため -coverpkg で internal を明示指定する
+#    go list ./... から tests パッケージ自身を除いた全パッケージを対象にする
+COVERPKG=$(go list ./... | grep -v "^golang-base-server/tests$" | tr '\n' ',')
+COVERPKG="${COVERPKG%,}"  # 末尾カンマを除去
+
+echo "📦 カバレッジ計測対象: $COVERPKG"
+
+# 5. テスト実行
 echo "🧪 テストを実行しています..."
-if ! go test -v -coverprofile=coverage.out ./... > test_result.log 2>&1; then
+if ! go test -v -coverprofile=coverage.out -coverpkg="$COVERPKG" ./... > test_result.log 2>&1; then
     echo ""
     echo "❌ テスト失敗"
     echo "--- 失敗したテスト ---"
@@ -34,7 +42,7 @@ if ! go test -v -coverprofile=coverage.out ./... > test_result.log 2>&1; then
     exit 1
 fi
 
-# 5. カバレッジの抽出
+# 6. カバレッジの抽出
 if [ ! -f coverage.out ]; then
     echo "❌ coverage.out が生成されませんでした。テストが実行されていない可能性があります。"
     exit 1
@@ -42,13 +50,13 @@ fi
 
 total_coverage=$(go tool cover -func=coverage.out | grep "^total:" | awk '{print $3}')
 
-# 6. カバレッジが 0.0% の場合は空振り判定
+# 7. カバレッジが 0.0% の場合は空振り判定
 if [ "$total_coverage" = "0.0%" ]; then
     echo "❌ Total Coverage が 0.0% です。テストが正しく実行されていません（空振り）。"
     exit 1
 fi
 
-# 7. 成功出力
+# 8. 成功出力
 echo ""
 echo "✅ テスト成功"
 echo "=================================="
