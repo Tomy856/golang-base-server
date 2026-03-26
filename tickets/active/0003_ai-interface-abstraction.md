@@ -1,6 +1,6 @@
 # Ticket: 0003 AIインターフェースの抽象化
 - **Jira**: N/A
-- **Status**: Done
+- **Status**: In Progress
 
 ## 1. Context & Goals
 AIインターフェースの抽象化: クライアントがGeminiやBedrockの仕様を意識せず、統一されたインターフェースでAIと対話できる基盤を作るため。
@@ -17,6 +17,7 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 |---------|------|
 | `/server/features/0003-ai-interface-abstraction/01-api-foundation.feature` | Step 1: バックエンド基盤 - API エンドポイント・データ構造の確立 |
 | `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature` | Step 2: フロントエンド基盤 - HTML/CSS/Vanilla JS フレームワーク |
+| `/server/features/0003-ai-interface-abstraction/02-01-chat-display-fix.feature` | Step 2-01: チャット表示修正 - 送信時のinitialView切り替えとメッセージ描画（Tailwind非依存） |
 | `/server/features/0003-ai-interface-abstraction/03-happy-path.feature` | Step 3: 正常系フロー - ユーザー入力 → サーバー処理 → UI 表示 |
 | `/server/features/0003-ai-interface-abstraction/04-client-validation.feature` | Step 4: フロントエンドバリデーション - Scenario 1 |
 | `/server/features/0003-ai-interface-abstraction/05-server-error-handling.feature` | Step 5: サーバー側エラー処理 - Scenario 2 |
@@ -85,34 +86,29 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 ## 3.5 UI Configuration
 
 ### ファイル構成
-- **テンプレート**: `/server/templates/index.html` （新規作成）
+- **テンプレート**: `/templates/index.html`
   - Go (Gin) の `c.HTML()` でレンダリング
   - チャットエリア、入力フィールド、送信ボタンの基本構造
   - **参照 BDD**: `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature`
-  
-- **JavaScript**: `/server/static/js/chat.js` （新規作成）
-  - Vanilla JS のみ使用（外部ライブラリ不使用）
-  - メッセージ送信、UI更新、バリデーション、エラーメッセージ表示を実装
-  - タイムアウト処理（30秒）を含む
-  - **参照 BDD**: 
+
+- **JavaScript**: `/static/js/chat.js`
+  - Vanilla JS のみ使用（外部ライブラリ・Tailwind CDN 不使用）
+  - メッセージバブルはインラインスタイルで描画（Tailwind クラス非依存）
+  - メッセージ送信、initialView切り替え、UI更新、バリデーション、エラーメッセージ表示を実装
+  - タイムアウト処理（30秒、AbortController使用）を含む
+  - **参照 BDD**:
     - `/server/features/0003-ai-interface-abstraction/02-ui-foundation.feature`
+    - `/server/features/0003-ai-interface-abstraction/02-01-chat-display-fix.feature`
     - `/server/features/0003-ai-interface-abstraction/04-client-validation.feature`
     - `/server/features/0003-ai-interface-abstraction/06-frontend-timeout.feature`
-
-## Definition of Done
-- [x] 01-api-foundation.feature: API エンドポイント・データ構造の確立
-- [x] 02-ui-foundation.feature: HTML/CSS/Vanilla JS フレームワーク
-- [ ] 03-happy-path.feature: 正常系フロー - ユーザー入力 → サーバー処理 → UI 表示
-- [ ] 04-client-validation.feature: フロントエンドバリデーション
-- [ ] 05-server-error-handling.feature: サーバー側エラー処理
-- [ ] 06-frontend-timeout.feature: フロントエンドタイムアウト処理
 
 ### UI フロー
 1. ユーザーが入力フィールドにメッセージを入力
 2. 送信ボタン押下時に Vanilla JS でバリデーション実行
-3. 有効な場合、POST `/api/chat` へ JSON リクエスト送信
-4. レスポンス受け取り後、チャットエリアに対話を追加
-5. エラー発生時は相応のメッセージを表示
+3. 有効な場合、#initialView を非表示 → #messageContainer を表示
+4. POST `/api/chat` へ JSON リクエスト送信（AbortController で30秒タイムアウト）
+5. レスポンス受け取り後、チャットエリアに対話を追加（インラインスタイルのバブル）
+6. エラー・タイムアウト発生時は相応のメッセージをチャットエリアに表示
 **参照 BDD**: `/server/features/0003-ai-interface-abstraction/03-happy-path.feature, 05-server-error-handling.feature`
 
 ## 4. Definition of Done
@@ -122,3 +118,8 @@ AIインターフェースの抽象化: クライアントがGeminiやBedrockの
 - [x] 単体テスト追加完了
 - [x] テストカバレッジ 80% 以上 (仮定)
 - [x] `bdd-done` フローの実行完了
+- [x] 02-01-chat-display-fix.feature: 送信時 initialView 非表示・メッセージバブル描画修正完了
+- [ ] 03-happy-path.feature: 正常系フロー - ユーザー入力 → サーバー処理 → UI 表示
+- [ ] 04-client-validation.feature: フロントエンドバリデーション
+- [ ] 05-server-error-handling.feature: サーバー側エラー処理
+- [ ] 06-frontend-timeout.feature: フロントエンドタイムアウト処理
