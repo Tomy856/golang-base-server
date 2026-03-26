@@ -2,7 +2,7 @@
 - **日付**: 2026-03-25
 - **ステータス**: Decided
 - **関連チケット**: 0003
-- **対象BDD**: server/features/0003-ai-interface-abstraction/01-api-foundation.feature, 02-ui-foundation.feature
+- **対象BDD**: server/features/0003-ai-interface-abstraction/01-api-foundation.feature, 02-00-ui-foundation.feature
 
 ## 背景
 AIインターフェースの抽象化の第一歩として、POST /api/chat エンドポイントを実装。フロントエンドからJSONリクエストを受け取り、レスポンスを返す基盤を構築。message (1-2000文字) と session_id (UUID) のバリデーションを行い、固定レスポンスを返す。さらに、静的ファイル配信とHTMLテンプレートによるUI基盤を構築。
