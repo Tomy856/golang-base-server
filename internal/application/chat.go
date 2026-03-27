@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -26,8 +27,9 @@ type chatUsecase struct {
 func NewChatUsecase() ChatUsecase {
 	proxyURL := os.Getenv("NODE_PROXY_URL")
 	if proxyURL == "" {
-		proxyURL = "http://localhost:3000"
+		proxyURL = "http://127.0.0.1:3000"
 	}
+	proxyURL = strings.Replace(proxyURL, "localhost", "127.0.0.1", 1)
 	return &chatUsecase{
 		proxyURL: proxyURL,
 		httpClient: &http.Client{
@@ -42,8 +44,9 @@ type proxyRequest struct {
 }
 
 type proxyResponse struct {
-	Reply string `json:"reply"`
-	Error string `json:"error"`
+	Reply  string `json:"reply"`
+	Error  string `json:"error"`
+	Detail string `json:"detail"`
 }
 
 // Chat はNode.jsプロキシサーバーにリクエストを転送し、AI応答を返します。
@@ -71,7 +74,7 @@ func (u *chatUsecase) Chat(ctx context.Context, message string, sessionID string
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("proxy error: %s", proxyResp.Error)
+		return "", fmt.Errorf("proxy error: %s (detail: %s)", proxyResp.Error, proxyResp.Detail)
 	}
 
 	return proxyResp.Reply, nil

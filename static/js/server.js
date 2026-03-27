@@ -25,7 +25,8 @@ app.post('/proxy/chat', async (req, res) => {
     res.json({ reply });
   } catch (err) {
     console.error('[AI Error]', err.message);
-    res.status(500).json({ error: 'AI processing failed', detail: err.message });
+    const detail = err.response && err.response.data ? JSON.stringify(err.response.data) : err.message;
+    res.status(500).json({ error: 'AI processing failed', detail });
   }
 });
 
@@ -54,21 +55,35 @@ async function callGemini(message) {
   const axios = require('axios');
   const { HttpsProxyAgent } = require('https-proxy-agent');
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY.trim() : null;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
 
-  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-  const body = {
-    contents: [{ parts: [{ text: message }] }]
-  };
-
-  // 社内プロキシ対応: 環境変数 HTTPS_PROXY / https_proxy を参照
   const proxyUrl = process.env.HTTPS_PROXY || process.env.https_proxy || null;
   const axiosConfig = {};
   if (proxyUrl) {
     axiosConfig.httpsAgent = new HttpsProxyAgent(proxyUrl);
-    axiosConfig.proxy = false; // axiosのデフォルトプロキシ処理を無効化してagentに委譲
+    axiosConfig.proxy = false;
   }
+
+  // 1. まずは環境で使えるモデル一覧を動的に取得する
+  let targetModel = 'gemini-1.5-flash';
+  try {
+    const listRes = await axios.get(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, axiosConfig);
+    const models = listRes.data.models || [];
+    // generateContent をサポートしている最初のモデルを探す
+    const validModel = models.find(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes('generateContent'));
+    if (validModel) {
+      targetModel = validModel.name.replace('models/', '');
+      console.log(`[AI Info] Automatically discovered supported model: ${targetModel}`);
+    }
+  } catch (err) {
+    console.warn(`[AI Warning] Failed to fetch model list, falling back to ${targetModel}`);
+  }
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:generateContent?key=${apiKey}`;
+  const body = {
+    contents: [{ parts: [{ text: message }] }]
+  };
 
   const response = await axios.post(url, body, axiosConfig);
   const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;

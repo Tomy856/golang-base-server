@@ -13,6 +13,8 @@ services:
       - .env
     environment:
       - GO111MODULE=on
+      # Windowsのボリュームマウント環境で air が go.mod をロックして Incorrect function となるのを防ぐ
+      - GOFLAGS=-mod=readonly
       # .bashrc の値をコンテナに引き継ぎする
       # AIapiキー: export AI_KEY=your_key を .bashrc に記載
       - GEMINI_API_KEY=${AI_KEY}
