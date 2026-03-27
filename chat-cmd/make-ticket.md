@@ -26,3 +26,9 @@ Jira等の抽象的なタイトルから、Copilotが迷わず実装でき、テ
 ### 4. 物理ファイル出力
 全ての要素が解消されたら、`tickets/active/[ID]_[Slug].md` を作成せよ。
 フォーマットは `tickets/template.md` に準拠すること。
+
+## ✅ チケット作成後チェック
+- [ ] `tickets/active/[ID]_[Slug].md` が存在する
+- [ ] `tickets/template.md` フォーマット準拠
+- [ ] 要求（Why/BDD/データ/制約）項目がすべて埋まっている
+- [ ] 参照した ADR / symbols_map の URL・ファイルパスが明記
