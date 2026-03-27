@@ -3,3 +3,9 @@ tmp/
 
 # ログ
 logs/error/*.log
+
+# Node.js
+docker/node_modules/
+
+# 環境変数（実際の値はコミットしない）
+.env

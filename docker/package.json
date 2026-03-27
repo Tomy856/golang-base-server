@@ -1,0 +1,18 @@
+{
+  "name": "node-proxy",
+  "version": "1.0.0",
+  "description": "Node.js AI proxy server for golang-base-server",
+  "main": "static/js/server.js",
+  "scripts": {
+    "start": "node static/js/server.js",
+    "dev": "nodemon static/js/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
