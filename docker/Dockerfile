@@ -19,18 +19,16 @@ RUN go install github.com/air-verse/air@v1.61.7 \
 
 COPY . .
 
-# Node.js 依存パッケージをインストール（docker/package.json を使用）
-RUN cd docker && npm install
-
-# package.json をルートにコピーして依存をインストール（static/js/server.js 用）
-COPY docker/package.json ./package.json
-RUN npm install
+# Node.js 依存パッケージを /node_modules にインストール
+# ボリュームマウント（.:/server）の外に置くことで上書きされない
+RUN cp docker/package.json /package.json && \
+    cd / && npm install
 
 # 起動スクリプト:
 #   1. godoc をバックグラウンド起動
-#   2. Node.js AIプロキシをバックグラウンド起動
+#   2. Node.js AIプロキシをバックグラウンド起動（NODE_PATH で /node_modules を参照）
 #   3. air をフォアグラウンド起動（ホットリロード）
 CMD ["sh", "-c", \
     "godoc -http=0.0.0.0:6060 -index -index_interval=0 & \
-     node static/js/server.js & \
+     NODE_PATH=/node_modules node static/js/server.js & \
      exec air"]

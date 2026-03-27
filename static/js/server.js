@@ -1,3 +1,4 @@
+// NODE_PATH=/node_modules で依存パッケージを解決
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -47,18 +48,29 @@ async function getAIReply(message, sessionId, agent) {
 /**
  * Gemini API呼び出し（実装例）
  * 環境変数: GEMINI_API_KEY
+ * 社内プロキシ環境: HTTPS_PROXY または https_proxy を自動参照
  */
 async function callGemini(message) {
   const axios = require('axios');
+  const { HttpsProxyAgent } = require('https-proxy-agent');
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   const body = {
     contents: [{ parts: [{ text: message }] }]
   };
 
-  const response = await axios.post(url, body);
+  // 社内プロキシ対応: 環境変数 HTTPS_PROXY / https_proxy を参照
+  const proxyUrl = process.env.HTTPS_PROXY || process.env.https_proxy || null;
+  const axiosConfig = {};
+  if (proxyUrl) {
+    axiosConfig.httpsAgent = new HttpsProxyAgent(proxyUrl);
+    axiosConfig.proxy = false; // axiosのデフォルトプロキシ処理を無効化してagentに委譲
+  }
+
+  const response = await axios.post(url, body, axiosConfig);
   const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
   if (!text) throw new Error('Gemini returned empty response');
   return text;
