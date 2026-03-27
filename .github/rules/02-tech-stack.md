@@ -12,7 +12,7 @@
     - 関数・構造体の上には必ず内容を説明するドキュメンテーションコメントを記述せよ。
 
 ## 技術スタック・実装ルール
-- **言語**: Go (Gin framework)
+- **言語**: Go (Gin framework), Node.js
 - **Server**: GORM
 - **Infrastructure**: Docker (WSL2/Rancher Desktop)
 - **Tools**: Obsidian (Mermaid), dbdiagram.io
