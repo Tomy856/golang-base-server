@@ -22,6 +22,10 @@ COPY . .
 # Node.js 依存パッケージをインストール（docker/package.json を使用）
 RUN cd docker && npm install
 
+# package.json をルートにコピーして依存をインストール（static/js/server.js 用）
+COPY docker/package.json ./package.json
+RUN npm install
+
 # 起動スクリプト:
 #   1. godoc をバックグラウンド起動
 #   2. Node.js AIプロキシをバックグラウンド起動
